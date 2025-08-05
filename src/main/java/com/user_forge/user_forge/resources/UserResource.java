@@ -1,18 +1,32 @@
 package com.user_forge.user_forge.resources;
 
 import com.user_forge.user_forge.entities.User;
+import com.user_forge.user_forge.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserResource {
 
+    @Autowired
+    UserService service;
+
     @GetMapping
-    public ResponseEntity<User> findAll() {
-        User u = new User(1L, "Gabriel", "gabriel@gmail.com", "98765-4321", "senha");
-        return ResponseEntity.ok(u);
+    public ResponseEntity<List<User>> findAll() {
+        List<User> users = service.findAll();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        User user = service.findById(id);
+        return ResponseEntity.ok(user);
     }
 }
