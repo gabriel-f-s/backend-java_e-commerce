@@ -2,11 +2,14 @@ package com.user_forge.user_forge.entities;
 
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -24,6 +27,10 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    @Setter(value = AccessLevel.NONE)
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 
     public User() {
     }
