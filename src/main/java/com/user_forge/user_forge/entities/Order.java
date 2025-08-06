@@ -3,13 +3,13 @@ package com.user_forge.user_forge.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.user_forge.user_forge.entities.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -21,6 +21,7 @@ public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant moment;
@@ -38,18 +39,5 @@ public class Order implements Serializable {
         this.moment = moment;
         this.orderStatus = orderStatus;
         this.client = client;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Order order = (Order) o;
-        return Objects.equals(getId(), order.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
     }
 }
