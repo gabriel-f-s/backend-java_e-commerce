@@ -1,5 +1,6 @@
 package com.user_forge.user_forge.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,10 @@ public class Category implements Serializable {
     private Long id;
     private String name;
 
+    @JsonIgnore
+    @Setter(value = AccessLevel.NONE)
+    @ManyToMany(mappedBy = "categories")
+    private Set<Product> products = new HashSet<>();
 
     public Category() {
     }
