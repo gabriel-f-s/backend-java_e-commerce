@@ -1,5 +1,6 @@
 package com.user_forge.user_forge.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -37,6 +38,11 @@ public class Product implements Serializable {
     )
     private Set<Category> categories = new HashSet<>();
 
+    @Setter(value = AccessLevel.NONE)
+    @Getter(value = AccessLevel.NONE)
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
+
     public Product() {
     }
 
@@ -46,5 +52,14 @@ public class Product implements Serializable {
         this.description = description;
         this.price = price;
         this.imgUrl = imgUrl;
+    }
+
+    @JsonIgnore
+    public Set<Order> getOrders() {
+        Set<Order> orders = new HashSet<>();
+        for (OrderItem item : this.items) {
+            orders.add(item.getOrder());
+        }
+        return orders;
     }
 }
