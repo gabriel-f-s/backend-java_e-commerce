@@ -3,18 +3,19 @@ package com.user_forge.user_forge.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.user_forge.user_forge.entities.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name="tb_order")
+@NoArgsConstructor
 public class Order implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -31,8 +32,8 @@ public class Order implements Serializable {
     @JoinColumn(name = "client_id")
     private User client;
 
-    public Order() {
-    }
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
         this.id = id;
