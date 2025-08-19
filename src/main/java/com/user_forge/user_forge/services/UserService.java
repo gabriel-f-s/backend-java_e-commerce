@@ -2,8 +2,11 @@ package com.user_forge.user_forge.services;
 
 import com.user_forge.user_forge.entities.User;
 import com.user_forge.user_forge.repositories.UserRepository;
+import com.user_forge.user_forge.services.exceptions.DatabaseException;
 import com.user_forge.user_forge.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +32,15 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        try {
+            if (!repository.existsById(id)) {
+                throw new ResourceNotFoundException(id);
+            }
+            repository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException exception) {
+            throw new DatabaseException(exception.getMessage());
+        }
     }
 
     public User update(Long id, User user) {
